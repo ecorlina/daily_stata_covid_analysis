@@ -30,7 +30,7 @@ IF YOU BACKTRACK WITH THE CODE, YOU'LL NEED TO FIX THAT.
 */
 
 
-cd "/Users/rickorlina/Dropbox/Rocinante Research/VOALA MBPro/Covid_19/daily_stata_covid_analysis/output"
+cd "/Users/rickorlina/Dropbox/Rocinante Research/VOALA MBPro/Covid_19/covid_analysis_output/stata_analysis"
 
 gen cumulative_cases_calc = sum(dph_new_cases)
 
@@ -241,7 +241,7 @@ graph export "Reported_Positivity-`date_string'.png", replace
 
 /* only when you're truly finished with the analysis and output */
 
-cd "/Users/rickorlina/Dropbox/Rocinante Research/VOALA MBPro/Covid_19/daily_stata_covid_analysis"
+cd "/Users/rickorlina/Documents/rprojects/daily_stata_covid_analysis"
 
 
 /* JUST FOR CONVENIENCE, RUN THESE AGAIN AT THE END */
