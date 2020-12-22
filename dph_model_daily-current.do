@@ -30,7 +30,7 @@ IF YOU BACKTRACK WITH THE CODE, YOU'LL NEED TO FIX THAT.
 */
 
 
-cd "/Users/rickorlina/Dropbox/Rocinante Research/VOALA MBPro/Covid_19/covid_analysis_output/stata_analysis"
+cd "/Users/rickorlina/Dropbox/Rocinante Research/VOALA MBPro/Covid_19/covid_analysis_output/stata_analysis_output"
 
 gen cumulative_cases_calc = sum(dph_new_cases)
 
@@ -64,7 +64,7 @@ nl exp2: dph_cumulative_cases day_number
 predict cchat
 
 
-scatter dph_cumulative_cases date2, sort xtitle(Date) title(Confirmed cases of COVID-19 in LA County, size(med))
+scatter dph_cumulative_cases date2, sort xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) title(Confirmed cases of COVID-19 in LA County, size(med))
 graph display, xsize(6.5)
 graph export "Cases-`date_string'.png", replace
 
@@ -82,7 +82,7 @@ nl exp2: dph_cumulative_deaths day_number
 predict cdhat
 
 
-scatter dph_cumulative_deaths date2, sort xtitle(Date) title(Deaths attributed to COVID-19 in LA County, size(med))
+scatter dph_cumulative_deaths date2, sort xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) title(Deaths attributed to COVID-19 in LA County, size(med))
 graph display, xsize(6.5)
 graph export "Deaths-`date_string'.png", replace
 
@@ -122,7 +122,7 @@ label variable dph_delta_hosp_ma "7-day-avg"
 replace past_21_days = 1 if past_21_days > 1
 replace past_21_days = past_21_days * 5000
 
-twoway (bar dph_new_cases date2, sort color(navy)) || line dph_counts_ma date2, sort color(maroon) xtitle(Date) legend(order(2 3) label(3 "7-day-MA")) title(Daily new cases of COVID-19 reported in LA County, size(med))
+twoway (bar dph_new_cases date2, sort color(navy)) || line dph_counts_ma date2, sort color(maroon) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) legend(order(2 3) label(3 "7-day-MA")) title(Daily new cases of COVID-19 reported in LA County, size(med))
 graph display, xsize(6.5)
 graph export "NewCases-`date_string'-7dayMA.png", replace
 
@@ -132,14 +132,14 @@ graph export "NewCases-`date_string'-7dayMA.png", replace
 replace past_14_days = 1 if past_14_days > 1
 replace past_14_days = past_14_days * 95
 
-twoway (bar dph_new_deaths date2, sort color(navy)) || line dph_deaths_ma date2, sort color(maroon) xtitle(Date) legend(order(2 3) label(3 "7-day-MA")) title(Daily new deaths attributed to COVID-19 reported in LA County, size(med))
+twoway (bar dph_new_deaths date2, sort color(navy)) || line dph_deaths_ma date2, sort color(maroon) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) legend(order(2 3) label(3 "7-day-MA")) title(Daily new deaths attributed to COVID-19 reported in LA County, size(med))
 graph display, xsize(6.5)
 graph export "NewDeaths-`date_string'-7dayMA.png", replace
 
 
 /* cases and deaths moving averages plotted together */
 
-twoway (line dph_counts_ma date2, sort color(navy)) || line dph_deaths_ma date2, sort color(maroon) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) ytitle(Cases, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 80) axis(2)) ylabel(0(25)100, axis(2)) title(COVID-19 in LA County - daily reported new cases vs new deaths, size(med))
+twoway (line dph_counts_ma date2, sort color(navy)) || line dph_deaths_ma date2, sort color(maroon) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Cases, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 80) axis(2)) ylabel(0(25)100, axis(2)) title(COVID-19 in LA County - daily reported new cases vs new deaths, size(med))
 graph display, xsize(6.5)
 graph export "cases_v_deaths_7dayavgs-`date_string'.png", replace
 
@@ -152,7 +152,7 @@ gen on_ventilator = hospitalized_now * hospitalized_now_vent
 replace past_14_days = 1 if past_14_days > 1
 replace past_14_days = past_14_days * 2400
 
-twoway (bar hospitalized_now date2 if day_number >= 32,  ysc(r(0)) sort color(navy)) (line dph_hospitalized_ma date2 if day_number > 32, sort color(maroon)) (line in_icu date2 if day_number >= 42, sort lcolor(cyan)) (line on_ventilator date2 if day_number >= 42, sort lcolor(lime)), title(COVID-19 hospitalizations on day of DPH report, size(med)) xtitle(Date) legend(rows(1) order (2 3 4 5) label(2 "hospitalized") label(3 "3-day-MA") symxsize(*.75) size(small))
+twoway (bar hospitalized_now date2 if day_number >= 32,  ysc(r(0)) sort color(navy)) (line dph_hospitalized_ma date2 if day_number > 32, sort color(maroon)) (line in_icu date2 if day_number >= 42, sort lcolor(cyan)) (line on_ventilator date2 if day_number >= 42, sort lcolor(lime)), title(COVID-19 hospitalizations on day of DPH report, size(med)) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) legend(rows(1) order (2 3 4 5) label(2 "hospitalized") label(3 "3-day-MA") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "Hospitalizations-`date_string'.png", replace
 
@@ -160,14 +160,14 @@ graph export "Hospitalizations-`date_string'.png", replace
 replace past_14_days = 1 if past_14_days > 1
 replace past_14_days = past_14_days * 350
 
-twoway (bar delta_hospitalizations date2 if day_number >= 30,  ysc(r(0)) sort color(navy)) (line dph_delta_hosp_ma date2 if day_number >= 30, sort color(maroon)), title(COVID-19 daily change in hospitalized (ever) on day of DPH report, size(sm)) xtitle(Date) legend(rows(1) order(2 3) label(2 "change in hospitalized_ever") label(3 "7-day-MA") symxsize(*.75) size(small))
+twoway (bar delta_hospitalizations date2 if day_number >= 30,  ysc(r(0)) sort color(navy)) (line dph_delta_hosp_ma date2 if day_number >= 30, sort color(maroon)), title(COVID-19 daily change in hospitalized (ever) on day of DPH report, size(sm)) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) legend(rows(1) order(2 3) label(2 "change in hospitalized_ever") label(3 "7-day-MA") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "NewHospitalized-`date_string'-7dayMA.png", replace
 
 
 /* hospitalizations and cases moving averages plotted together */
 
-twoway (line dph_counts_ma date2, sort color(navy)) || line dph_hospitalized_ma date2, sort color(maroon) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) ytitle(Count) title(COVID-19 in LA County - daily reported new cases v hospitalizations, size(med)) legend(rows(1) label(1 "Cases 7-day-MA") label(2 "Hospitalizations 3-day-MA") symxsize(*.75) size(small))
+twoway (line dph_counts_ma date2, sort color(navy)) || line dph_hospitalized_ma date2, sort color(maroon) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Count) title(COVID-19 in LA County - daily reported new cases v hospitalizations, size(med)) legend(rows(1) label(1 "Cases 7-day-MA") label(2 "Hospitalizations 3-day-MA") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "cases_v_hospitalizations_7dayavgs-`date_string'.png", replace
 
@@ -175,14 +175,14 @@ graph export "cases_v_hospitalizations_7dayavgs-`date_string'.png", replace
 
 /* hospitalizations and deaths moving averages plotted together */
 
-twoway (line dph_hospitalized_ma date2, sort color(navy)) || line dph_deaths_ma date2, sort color(maroon) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) ytitle(Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 80) axis(2)) ylabel(0(25)100, axis(2)) title(COVID-19 in LA County - daily reported hospitalizations vs new deaths, size(med)) legend(rows(1) label(1 "hospitalized 3-day-MA") label(2 "deaths 7-day-MA") symxsize(*.75) size(small))
+twoway (line dph_hospitalized_ma date2, sort color(navy)) || line dph_deaths_ma date2, sort color(maroon) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 80) axis(2)) ylabel(0(25)100, axis(2)) title(COVID-19 in LA County - daily reported hospitalizations vs new deaths, size(med)) legend(rows(1) label(1 "hospitalized 3-day-MA") label(2 "deaths 7-day-MA") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "hospitalizations_v_deaths_7dayavgs-`date_string'.png", replace
 
 
 /* cases, hospitalizations, and deaths moving averages plotted together */
 
-twoway (line dph_counts_ma date2, sort color(navy)) || (line dph_hospitalized_ma date2, sort color(maroon)) || line dph_deaths_ma date2, sort color(green) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) ytitle(Cases & Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 10000) axis(1)) yscale(range(0 200) axis(2)) ylabel(0(2000)10000, axis(1)) ylabel(0(50)200, axis(2)) title("COVID-19 in LA County - daily reported cases, hospitalizations, and deaths", size(med)) legend(rows(1) label(1 "cases 7-day-avg") label(2 "hospitalized 3-day-avg") label(3 "deaths 7-day-avg") symxsize(*.75) size(small))
+twoway (line dph_counts_ma date2, sort color(navy)) || (line dph_hospitalized_ma date2, sort color(maroon)) || line dph_deaths_ma date2, sort color(green) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Cases & Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 18000) axis(1)) yscale(range(0 200) axis(2)) ylabel(0(2000)18000, axis(1)) ylabel(0(50)200, axis(2)) title("COVID-19 in LA County - daily reported cases, hospitalizations, and deaths", size(med)) legend(rows(1) label(1 "cases 7-day-avg") label(2 "hospitalized 3-day-avg") label(3 "deaths 7-day-avg") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "chd_7dayavgs-`date_string'.png", replace
 
@@ -241,7 +241,7 @@ graph export "Reported_Positivity-`date_string'.png", replace
 
 /* only when you're truly finished with the analysis and output */
 
-cd "/Users/rickorlina/Documents/rprojects/daily_stata_covid_analysis"
+cd "/Users/rickorlina/Documents/rprojects/Covid19/daily_stata_analysis"
 
 
 /* JUST FOR CONVENIENCE, RUN THESE AGAIN AT THE END */
