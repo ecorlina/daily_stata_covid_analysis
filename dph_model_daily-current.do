@@ -57,8 +57,8 @@ local date_string = trim("`c_date'")
 gen date2 = date(date, "YMD")
 format date2 %tdMon_DD
 
-nl log3: dph_cumulative_cases day_number
-predict cchat_log3
+//nl log3: dph_cumulative_cases day_number
+//predict cchat_log3
 
 nl exp2: dph_cumulative_cases day_number
 predict cchat
@@ -75,8 +75,8 @@ replace since_day_76 = 250000 if day_number >= 76
 /* logistic function regression  - DEATHS */
 /* see https://en.wikipedia.org/wiki/Logistic_function for parameter interpretation */
 
-nl log3: dph_cumulative_deaths day_number
-predict cdhat_log3
+//nl log3: dph_cumulative_deaths day_number
+//predict cdhat_log3
 
 nl exp2: dph_cumulative_deaths day_number
 predict cdhat
@@ -182,7 +182,7 @@ graph export "hospitalizations_v_deaths_7dayavgs-`date_string'.png", replace
 
 /* cases, hospitalizations, and deaths moving averages plotted together */
 
-twoway (line dph_counts_ma date2, sort color(navy)) || (line dph_hospitalized_ma date2, sort color(maroon)) || line dph_deaths_ma date2, sort color(green) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Cases & Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 18000) axis(1)) yscale(range(0 200) axis(2)) ylabel(0(2000)18000, axis(1)) ylabel(0(50)200, axis(2)) title("COVID-19 in LA County - daily reported cases, hospitalizations, and deaths", size(med)) legend(rows(1) label(1 "cases 7-day-avg") label(2 "hospitalized 3-day-avg") label(3 "deaths 7-day-avg") symxsize(*.75) size(small))
+twoway (line dph_counts_ma date2, sort color(navy)) || (line dph_hospitalized_ma date2, sort color(maroon)) || line dph_deaths_ma date2, sort color(green) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Cases & Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 18000) axis(1)) yscale(range(0 300) axis(2)) ylabel(0(3000)18000, axis(1)) ylabel(0(50)300, axis(2)) title("COVID-19 in LA County - daily reported cases, hospitalizations, and deaths", size(med)) legend(rows(1) label(1 "cases 7-day-avg") label(2 "hospitalized 3-day-avg") label(3 "deaths 7-day-avg") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "chd_7dayavgs-`date_string'.png", replace
 
@@ -250,11 +250,11 @@ nl exp2: dph_cumulative_cases day_number
 
 nl exp2: dph_cumulative_deaths day_number
 
-nl log3: dph_cumulative_cases day_number
+//nl log3: dph_cumulative_cases day_number
 
-nl log3: dph_cumulative_deaths day_number
+//nl log3: dph_cumulative_deaths day_number
 
 
 
-drop cumulative_cases_calc date2 max_day past_7_days past_14_days past_21_days cchat_log3 cchat since_day_76 cdhat_log3 cdhat since_day_45 delta_tests delta_hospitalizations dph_counts_ma dph_deaths_ma dph_hospitalized_ma dph_delta_tests_ma dph_delta_hosp_ma dph_reported_positivity_ma tested_positive tested_negative in_icu on_ventilator dph_cumulative_cases_unsheltered dph_total_tested_est_k today_test_positivity dph_daily_positivity_ma
+drop cumulative_cases_calc date2 max_day past_7_days past_14_days past_21_days /*cchat_log3*/ cchat since_day_76 /*cdhat_log3*/ cdhat since_day_45 delta_tests delta_hospitalizations dph_counts_ma dph_deaths_ma dph_hospitalized_ma dph_delta_tests_ma dph_delta_hosp_ma dph_reported_positivity_ma tested_positive tested_negative in_icu on_ventilator dph_cumulative_cases_unsheltered dph_total_tested_est_k today_test_positivity dph_daily_positivity_ma
 
