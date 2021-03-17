@@ -107,7 +107,7 @@ tssmooth ma dph_hospitalized_ma = hospitalized_now , window(2 1)
 tssmooth ma dph_delta_tests_ma = delta_tests, window(6 1)
 tssmooth ma dph_daily_positivity_ma = today_test_positivity, window(6 1)
 tssmooth ma dph_delta_hosp_ma = delta_hospitalizations, window(6 1)
-tssmooth ma dph_reported_positivity_ma = test_positivity, window(6 1)
+tssmooth ma dph_reported_positivity_ma = test_positivity_cumulative, window(6 1)
 
 tsset, clear
 
@@ -182,7 +182,7 @@ graph export "hospitalizations_v_deaths_7dayavgs-`date_string'.png", replace
 
 /* cases, hospitalizations, and deaths moving averages plotted together */
 
-twoway (line dph_counts_ma date2, sort color(navy)) || (line dph_hospitalized_ma date2, sort color(maroon)) || line dph_deaths_ma date2, sort color(green) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash)) tline(04jul2020, lpattern(shortdash)) tline(07sep2020, lpattern(shortdash)) tline(31oct2020, lpattern(shortdash)) tline(26nov2020, lpattern(shortdash)) tline(25dec2020, lpattern(shortdash)) ytitle(Cases & Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 18000) axis(1)) yscale(range(0 300) axis(2)) ylabel(0(3000)18000, axis(1)) ylabel(0(50)300, axis(2)) title("COVID-19 in LA County - daily reported cases, hospitalizations, and deaths", size(med)) legend(rows(1) label(1 "cases 7-day-avg") label(2 "hospitalized 3-day-avg") label(3 "deaths 7-day-avg") symxsize(*.75) size(small))
+twoway (line dph_counts_ma date2, sort color(navy)) || (line dph_hospitalized_ma date2, sort color(maroon)) || line dph_deaths_ma date2, sort color(green) yaxis(2) xtitle(Date) tline(25may2020, lpattern(shortdash) lwidth(thin) lcolor(gs10)) tline(04jul2020, lpattern(shortdash) lwidth(thin) lcolor(gs10)) tline(07sep2020, lpattern(shortdash) lwidth(thin) lcolor(gs10)) tline(31oct2020, lpattern(shortdash) lwidth(thin) lcolor(gs10)) tline(26nov2020, lpattern(shortdash) lwidth(thin) lcolor(gs10)) tline(25dec2020, lpattern(shortdash) lwidth(thin) lcolor(gs10)) ytitle(Cases & Hospitalizations, axis(1)) ytitle(Deaths, axis(2)) yscale(range(0 18000) axis(1)) yscale(range(0 600) axis(2)) ylabel(0(3000)18000, axis(1)) ylabel(0(100)600, axis(2)) title("COVID-19 in LA County - daily reported cases, hospitalizations, and deaths", size(med)) legend(rows(1) label(1 "cases 7-day-avg") label(2 "hospitalized 3-day-avg") label(3 "deaths 7-day-avg") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "chd_7dayavgs-`date_string'.png", replace
 
@@ -193,7 +193,7 @@ graph export "chd_7dayavgs-`date_string'.png", replace
 
 gen dph_total_tested_est_k = dph_total_tested_est / 1000
 
-gen tested_positive = round(dph_total_tested_est_k * test_positivity)
+gen tested_positive = round(dph_total_tested_est_k * test_positivity_cumulative)
 gen tested_negative = dph_total_tested_est_k - tested_positive
 
 
@@ -220,6 +220,13 @@ replace past_14_days = past_14_days * 3000
 twoway /*(area past_14_days date2 if day_number >= 45, color(gs14)) ||*/ (bar dph_cumulative_cases_peh date2 if day_number >= 45,  ysc(r(0)) sort color(navy*.7) lwidth(thin) lcolor(navy)) (bar dph_cumulative_cases_peh_housed date2 if day_number >= 45, sort color(maroon*.8) lwidth(thin) lcolor(maroon)), title(COVID-19 among PEH as reported by DPH, size(sm)) xtitle(Date) legend(rows(1) order(2 3) label(2 "unsheltered") label(3 "housed") symxsize(*.75) size(small))
 graph display, xsize(6.5)
 graph export "Cases_PEH-`date_string'.png", replace
+
+
+/* vaccinations */
+
+twoway (bar doses_administered date2 if day_number >= 320,  ysc(r(0)) sort color(navy*.7) lwidth(thin) lcolor(navy)) (bar second_doses date2 if day_number >= 320, sort color(maroon*.8) lwidth(thin) lcolor(maroon)), title(COVID-19 vaccinations as reported by DPH, size(sm)) xtitle(Date) legend(rows(1) order(2 3) label(1 "first dose") label(2 "second dose") symxsize(*.75) size(small))
+graph display, xsize(6.5)
+graph export "Vaccinations-`date_string'.png", replace
 
 
 /* today's test positivity rate */
